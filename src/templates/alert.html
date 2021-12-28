@@ -1,0 +1,60 @@
+{% load static %}
+{% load i18n %}
+
+<div id="alert-modal" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div id="alert-header">確認</div>
+            </div>
+            <div class="modal-body">
+                <p id="alert-body"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="alert_OK" class="btn btn-secondary" data-dismiss="modal">{% trans 'Close' %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirm-modal" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div id="confirm-header">確認</div>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-body"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="confirm_OK" class="btn btn-primary" data-dismiss="modal">{% trans 'OK' %}</button>
+                <button type="button" id="confirm_cancel" class="btn btn-secondary" data-dismiss="modal">{% trans 'Cancel' %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function show_alert(title, text, func) {
+        $("#alert_OK").on('click', function (event) {
+            func(true);
+        });
+
+        $("#alert-header").html(title);
+        $("#alert-body").html(text);
+        $('#alert-modal').modal("show");
+    }
+
+    function show_confirm(title, text, func) {
+        $("#confirm_OK").on('click', function (event) {
+            func(true);
+        });
+        $("#confirm_cancel").on('click', function (event) {
+            func(false);
+        });
+
+        $("#confirm-header").html(title);
+        $("#confirm-body").html(text);
+        $('#confirm-modal').modal("show");
+    }
+</script>

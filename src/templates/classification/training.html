@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+{% block title %}Classification | Main{% endblock title %}
+{% block content %}
+{% load widget_tweaks %}
+{% load static %}
+{% load i18n %}
+
+<div class="mx-4">
+  <div class="row my-2">
+    <div class="col text-center">
+      <h5>{% trans 'Training' %}</h5>
+    </div>
+  </div>
+  <!-- info -->
+  <div class="row">
+    <div class="col">
+      <table class="table table-borderless">
+        <tbody>
+          <tr>
+            <td class="pt-0 pb-1">Train Loss:</td>
+            <td class="pt-0 pb-1">
+              <div id="t-train-loss"></div>
+            </td>
+            <td class="pt-0 pb-1">Val Loss:</td>
+            <td class="pt-0 pb-1">
+              <div id="t-val-loss"></div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pt-0 pb-1">Train Acc:</td>
+            <td class="pt-0 pb-1">
+              <div id="t-train-acc"></div>
+            </td>
+            <td class="pt-0 pb-1">Val Acc:</td>
+            <td class="pt-0 pb-1">
+              <div id="t-val-acc"></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row mb-4">
+    <div class="col">
+      <div class="progress">
+        <div id="t-iteration-progress" class="progress-bar  bg-success" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100">0%</div>
+      </div>
+      <div class="progress">
+        <div id="t-epoch-progress" class="progress-bar" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100">0%</div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button id="train_cancel" class="btn btn-primary">
+        <span id="spinner-cancel" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
+        {% trans 'Stop Training' %}
+      </button>
+      <div id="cancel_message"></div>
+    </div>
+    <div class="col">
+      <span id="spinner-wait" class="text-primary spinner-border" role="status" aria-hidden="true" style="display: none;"></span>
+    </div>
+  </div>
+  <!-- graph -->
+  <div class="row">
+    <div class="col">
+      <div id="graph-container" class="text-center">
+        <div style="width:1024px; height:auto">
+          <canvas id="canvas"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Alert Dialog -->
+{% include 'alert.html' %}
+
+{% endblock %}
+
+<!--==================== javascript ====================-->
+{% block javascript %}
+
+<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+<script type="text/javascript"  src="{% static 'js/train_chart.js' %}"></script>
+<script type="text/javascript">
+
+  const model_id = {{ model_id }};
+  const model_name = "{{ model_name }}";
+  const dataset_name = "{{ dataset_name }}";
+  const project_name = "{{ project_name }}";
+  const epoch = {{ epochs }};
+  const batch = {{ batch_size }};
+  const architecture = "{{ architecture_type }}";
+  const learning_rate = {{ learning_rate }};
+  const optimizer = "{{ optimizer }}";
+  const val_ratio = {{ val_ratio }};
+  const test_ratio = {{ test_ratio }};
+  const memo = "{{ memo }}";
+  const fine_tuning = {% if fine_tuning == True %}true{% else %} false{% endif %};
+  const use_default_ratio = {% if use_default_ratio == True %}true{% else %} false{% endif %};
+  const horizontal_flip = {% if horizontal_flip == True %}true{% else %} false{% endif %};
+  const vertical_flip = {% if vertical_flip == True %}true{% else %} false{% endif %};
+  const rotate_30 = {% if rotate_30 == True %}true{% else %} false{% endif %};
+  const rotate_45 = {% if rotate_45 == True %}true{% else %} false{% endif %};
+  const rotate_90 = {% if rotate_90 == True %}true{% else %} false{% endif %};
+  const contrast = {% if contrast == True %}true{% else %} false{% endif %};
+  const gaussian_noise = {% if gaussian_noise == True %}true{% else %} false{% endif %};
+  const blur = {% if blur == True %}true{% else %} false{% endif %};
+  const image_type = "{{ image_type }}";
+
+  const weights_path = "{{ weights_path }}";
+  const weights_file_path = "{{ weights_file_path }}";
+
+  const image_list_unique_id = "{{ image_list_unique_id }}" === "None" ? null : {{ image_list_unique_id }};
+  const n_iter = {{ n_iter }};
+
+  let chart;
+  let chartData = [[], [], [], []];
+
+  const socket = new WebSocket(
+    'ws://'
+    + window.location.host
+    + '/ws/classification'
+  )
+
+  socket.onopen = function (e) {
+    // get access language from URL
+    let user_lang = location.href.split('/')[3];
+    socket.send(JSON.stringify({
+      'status': 'lang-setting',
+      'user-lang': user_lang
+    }));
+
+    // data send
+    socket.send(JSON.stringify({
+      'status': 'train',
+      'model_id': model_id,
+      'project_name': project_name,
+      'model_name': model_name,
+      'dataset_name': dataset_name,
+      'architecture': architecture,
+      'epoch': epoch,
+      'batch': batch,
+      'learning_rate': learning_rate,
+      'optimizer': optimizer,
+      'use_default_ratio': use_default_ratio,
+      'test_ratio': test_ratio,
+      'val_ratio': val_ratio,
+      'fine_tuning': fine_tuning,
+      'horizontal_flip': horizontal_flip,
+      'vertical_flip': vertical_flip,
+      'rotate_30': rotate_30,
+      'rotate_45': rotate_45,
+      'rotate_90': rotate_90,
+      'gaussian_noise': gaussian_noise,
+      'blur': blur, 'contrast': contrast,
+      'image_type': image_type,
+      'memo': memo,
+      'weights_path': weights_path,
+      'weights_file_path': weights_file_path,
+      'image_list_unique_id': image_list_unique_id,
+      'n_iter': n_iter,
+    }));
+  }
+
+  socket.onclose = function (e) {
+    if (abnormal_disconnection == true) {
+      alert(gettext("WebSocket disconnected!\nplease check deepeye terminal!"))
+      setTimeout("location.href='/classification'/", 3000);
+    }
+  }
+
+  $(window).bind('load', function () {
+    $('#spinner-wait').show();
+    training_start();
+  });
+
+  // stop 
+  $('#train_cancel').on('click', function (e) {
+    show_confirm(gettext("Notice"), gettext("stop learning,\nIs it OK?"), function (result) {
+      if (result) {
+        $("#train_cancel").prop("disabled", true);
+        $('#spinner-cancel').show();
+        $("#cancel_message").html(gettext("please wait epoch end"))
+
+        socket.send(JSON.stringify({
+          'status': 'stop',
+        }));
+        abnormal_disconnection = false;
+      }
+    });
+  });
+
+  function training_start() {
+    // create foundation of graph
+    var ctx = document.getElementById('canvas').getContext('2d');
+    chart = createChart(ctx, epoch);
+  }
+
+  socket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+
+    // Reloding page with django message
+    if (data.status === "reload") {
+      let msg = ""
+      if (data['cancel']) {
+        msg = gettext("Training canceled");
+      } else {
+        msg = gettext("Training ended");
+      }
+
+      $('#spinner-wait').hide();
+      show_alert(gettext("Notice"), msg, function () {
+        window.location.href = "/classification/" + data['project_id'];
+      });
+    }
+
+    else if (data.status === "error") {
+      alert(data.text);
+      // reload
+      location.replace('/classification')
+    }
+
+    // process on window
+    else if (data.status === "process-update") {
+      //$("#t-process").html(data.process);
+    }
+
+    // updating graph if status is training
+    else if (data.status === "training") {
+      $('#spinner-wait').hide();
+      // Batch Graph
+      if (typeof data.batch !== "undefined") {
+        let progress_iter = parseInt((data.batch / data.n_iter) * 100)
+        $("#t-iteration-progress").html(progress_iter + "%" + " (" + data.batch + " / " + data.n_iter + ")");
+        $("#t-iteration-progress").attr('aria-valuenow', progress_iter).css('width', progress_iter + '%');
+      }
+      // Epoch Graph
+      if (typeof data.epoch !== "undefined") {
+        if (data.epoch === data.epochs) {
+          $('#spinner-wait').show();
+          $("#train_cancel").prop("disabled", true);
+        }
+
+        $("#t-train-loss").html(data.train_loss.toFixed(5));
+        $("#t-train-acc").html(data.train_acc.toFixed(5));
+        $("#t-val-loss").html(data.val_loss.toFixed(5));
+        $("#t-val-acc").html(data.val_acc.toFixed(5));
+        $("#t-epoch").html(data.epoch);
+        let progress = parseInt((data.epoch / data.epochs) * 100);
+        $("#t-epoch-progress").html(progress + '%' + ' (' + data.epoch + '/' + data.epochs + ')');
+        $("#t-epoch-progress").attr('aria-valuenow', progress).css('width', progress + '%');
+
+        chartData[0].push(data.train_loss);
+        chartData[1].push(data.train_acc);
+        chartData[2].push(data.val_loss);
+        chartData[3].push(data.val_acc);        
+        setChartData(chart, chartData,  data.best_train_epoch, data.best_val_epoch);
+        chart.update();
+      }
+    }
+
+    else if (data.status === "training-stopped") {
+    }
+
+    else if (data.status === "training-ended") {
+    }
+  }
+
+</script>
+
+{% endblock %}

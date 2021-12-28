@@ -1,0 +1,92 @@
+.material-icons {
+  font-size: 10px;
+  color:#0f56a1;
+  cursor: pointer;
+}
+
+.modal-dialog-fluid {
+  max-width: inherit;
+  width: 80%;
+  margin-left: 10%;
+}
+
+.modal {
+  max-height: 100%;
+  overflow-y: auto;
+
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-header {
+  color: #ffffff;
+  background-color: #0f56a1;
+}
+
+.list-group-item {
+  border: none;
+  outline: none;
+}
+
+.list-group > button {
+  border: none;
+  outline: none;
+}
+
+/*
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+*/
+
+ul.errorlist {
+    margin: 0;
+    padding: 0;
+}
+.errorlist li{
+    border: .1rem solid #f00;
+    color: #f00;
+    background: rgba(255, 0, 0, .15);
+    list-style-position: inside;
+    display: block;
+    padding: 1rem;
+    text-align: left;
+    border-radius: .3rem;
+}
+
+table, th, td {
+  width: auto !important;
+}
+
+/*
+.resizeimage img { width: 100%; }
+*/
+
+.scroll-y {
+  overflow:hidden;
+  overflow-y:scroll;
+}
+
+.list-box-s {
+  width: 100%;
+  height: 100%;
+  max-height: 150px;
+  min-height: 150px;
+}
+
+.list-box-m {
+  width: 100%;
+  height: 100%;
+  max-height: 300px;
+  min-height: 300px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+canvas {
+  width: 100%;
+  height: auto;
+}

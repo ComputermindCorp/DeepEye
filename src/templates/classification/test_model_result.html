@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% block title %}Classification | Main{% endblock title %}
+{% block content %}
+{% load widget_tweaks %}
+{% load static %}
+{% load i18n %}
+{% load custom_templatetags %}
+
+<div class="mx-4">
+  <div class="row my-4">
+    <div class="col">
+      <h5>{% trans 'Test Result' %}</h5>
+      <span class="mr-4">{% trans 'Model Name' %}: {{model.name }}</span>
+      <span>{% trans 'Dataset Name' %}: {{dataset.name }}</span>
+    </div>
+  </div>
+  <div class="row my-4">
+    <div class="col">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Class</th>
+            <th>Precision</th>
+            <th>Recall</th>
+            <th>F-score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cls_name, precision_value, recall_value, fscore_value in pred_info_list %}
+          <tr>
+            <td><b>{{cls_name}}</b></td>
+            <td>{{precision_value | floatformat:5}}</td>
+            <td>{{recall_value | floatformat:5}}</td>
+            <td>{{fscore_value | floatformat:5}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- confusion matrix -->
+  <div class="row my-4">
+    <div>
+      <div class="ml-4">Predict</div>
+      <div class="float-left" style="writing-mode: vertical-rl;">Actual</div>
+      <table class="table table-bordered" style="table-layout:fixed;">
+        <thead>
+          <tr>
+            <th></th>
+            {% for cls in class_names %}
+            <th>
+              <div class="text-center" data-toggle="tooltip" data-placement="top" data-delay="500" title="{{cls}}">
+                {{ cls | limit:10 }}
+              </div>
+            </th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in confusion_matrix %}
+          <tr>
+            <td>
+              <div class="text-center" data-toggle="tooltip" data-placement="top" data-delay="500" title="{{ class_names | index:forloop.counter0}}">
+                <b>{{ class_names | index:forloop.counter0 | limit:10 }}</b>
+              </div>
+            </td>
+            {% for value in row %}
+            <td class="text-center {%if forloop.counter0 == forloop.parentloop.counter0 %}table-success{% elif value > 0 %}table-danger{%else%}table-light{%endif%}">{{value}}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row my-4">
+    <div class="col">
+      <form action="/classification/test_model/{{project.id}}/{{model.id}}" method="GET">
+        <button type="submit" id="button-back" class="btn btn-secondary">{% trans 'Back' %}</button>
+      </form>
+    </div>
+  </div>
+  <!-- result detail -->
+  <div class="row my-4">
+    <div class="col">
+      <table class="table">
+        <thead>
+          <tr>
+            <td>No</td>
+            <td>Name</td>
+            <td>Image</td>
+            <td>Label</td>
+            <td>Predict</td>
+            <td>Result</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pred, pred_name, pred_prob, max_pred_prob, label, label_name, result, img_path, name in test_result_data %}
+          <tr class="{% if result == False %}table-danger{% endif %}">
+            <td>{{forloop.counter}}</td>
+            <td>
+              <div data-toggle="tooltip" data-placement="top" data-delay="500" title="{{name}}">{{name | short:30 }}</div>
+            </td>
+            <td><a href="{{ img_path }}" target="_blank"><img src="{{ img_path }}" width="200"></a></td>
+            <td>
+              <div>{{label_name}}</div>
+              <div>[{{label}}]</div>
+            </td>
+            <td>
+              <div>{{pred_name}}</div>
+              <div>[{{pred}}]</div>
+              <div data-toggle="tooltip" data-delay="500" data-html="true" title="{% for p in pred_prob %}<div>[{{forloop.counter0}}] {{ p |floatformat:5 }}</div>{% endfor %}">
+                ({{max_pred_prob |floatformat:5}})
+              </div>
+            </td>
+            <td>
+              {% if result %}
+              <div>OK</div>
+              {% else %}
+              <div>NG</div>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- Alert Dialog -->
+{% include 'alert.html' %}
+
+{% endblock %}
+
+<!--==================== javascript ====================-->
+{% block javascript %}
+
+<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+<script type="text/javascript">
+
+
+  $(window).bind('load', function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  });
+
+</script>
+
+{% endblock javascript %}

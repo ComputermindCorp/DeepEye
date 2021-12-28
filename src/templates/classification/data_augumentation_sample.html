@@ -1,0 +1,59 @@
+{% load i18n %}
+{% load static %}
+
+<div id="DA-sample-modal" class="modal" role="dialog">
+  <div class="modal-dialog modal-dialog-fluid" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{% trans 'DataAugmentation Sample' %}</h5>
+      </div>
+      <div class="modal-body">
+        <!-- original area-->
+        <div style="width: 25%; float: left; padding: 10px 10px 10px 10px;">
+          <label>{% trans 'original' %}</label><br>
+          <img src="{% static 'img/DA_sample/original.jpg' %}" style="max-height: 100px;">
+          <div style="clear:both;"></div>
+        </div>
+        <!-- flip area-->
+        <div style="width: 25%; float: left; padding: 10px 10px 10px 10px;">
+          <label>{% trans 'horizontal flip' %}</label><br>
+          <img src="{% static 'img/DA_sample/horizontal_flip.jpg' %}" style="max-height: 100px;">
+          <div style="clear:both;"></div>
+          <label>{% trans 'vertical flip' %}</label><br>
+          <img src="{% static 'img/DA_sample/vertical_flip.jpg' %}" style="max-height: 100px;">
+          <div style="clear:both;"></div>
+        </div>
+        <!-- rotate area-->
+        <div style="width: 25%; float: left; padding: 10px 10px 10px 10px;">
+          <label>{% trans 'rotate 30°step' %}</label><br>
+          <img src="{% static 'img/DA_sample/rotate_30.jpg' %}" style="max-height: 100px;">
+          <div style="clear:both;"></div>
+          <label>{% trans 'rotate 45°step' %}</label><br>
+          <img src="{% static 'img/DA_sample/rotate_45.jpg' %}" style="max-height: 100px;">
+          <div style="clear:both;"></div>
+          <label>{% trans 'rotate 90°step' %}</label><br>
+          <img src="{% static 'img/DA_sample/rotate_90.jpg' %}" style="max-height: 100px;">
+          <div style="clear:both;"></div>
+        </div>
+        <!-- image processing area-->
+        <div style="width: 25%; float: left; padding: 10px 10px 10px 10px;">
+          <label>{% trans 'Hi Contrast' %}</label><br>
+          <img src="{% static 'img/DA_sample/hi_contrast.jpg' %}" style="max-height: 100px;">
+          <div style="clear:both;"></div>
+          <label>{% trans 'Lo Contrast' %}</label><br>
+          <img src="{% static 'img/DA_sample/lo_contrast.jpg' %}" style="max-height: 100px;">
+          <div style="clear:both;"></div>
+          <label>{% trans 'gaussian noise' %}</label><br>
+          <img src="{% static 'img/DA_sample/gaussian_noise.jpg' %}" style="max-height: 100px;">
+          <div style="clear:both;"></div>
+          <label>{% trans 'blur' %}</label><br>
+          <img src="{% static 'img/DA_sample/blur.jpg' %}" style="max-height: 100px;">
+          <div style="clear:both;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "Close" %}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

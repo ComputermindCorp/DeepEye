@@ -1,0 +1,531 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-11-04 16:58+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: EagleEye/classification/consumers.py:89
+#: EagleEye/objectdetection/consumers.py:86
+msgid "dataset delete : {}"
+msgstr "データセット削除 : {}"
+
+#: EagleEye/classification/consumers.py:102
+#: EagleEye/objectdetection/consumers.py:99
+msgid "model delete : {}"
+msgstr "モデル削除 : {}"
+
+#: EagleEye/classification/consumers.py:123
+msgid "report view : {} not tested yet"
+msgstr "結果確認 : {} はテストを実行していないためレポートを表示できません"
+
+#: EagleEye/classification/consumers.py:250
+#: EagleEye/objectdetection/consumers.py:238
+msgid "training failed please check terminal"
+msgstr "学習に失敗しました ターミナルを確認してください"
+
+#: EagleEye/classification/consumers.py:287
+#: EagleEye/objectdetection/consumers.py:287
+msgid "training : {} training ended"
+msgstr "学習 : {} の学習が完了しました"
+
+#: EagleEye/classification/consumers.py:351
+#: EagleEye/classification/consumers.py:384
+msgid "please select data type"
+msgstr "データタイプを選択してください"
+
+#: EagleEye/classification/consumers.py:368
+#: EagleEye/classification/consumers.py:408
+msgid "predict : predict class not match training class"
+msgstr "推論 : 推論クラスが学習クラスと一致していません"
+
+#: EagleEye/classification/consumers.py:390
+msgid "dataset ({}) not found"
+msgstr "データセット{}が見つかりません"
+
+#: EagleEye/classification/consumers.py:444
+msgid "predict : {} predict finish"
+msgstr "推論 : {}の推論が完了しました"
+
+#: EagleEye/classification/consumers.py:450
+msgid "Chosen model training not completed"
+msgstr "選択したモデルは学習が完了していません"
+
+#: EagleEye/classification/views.py:98 EagleEye/classification/views.py:172
+msgid "dataset save : This dataset name already exist"
+msgstr "データセット保存 : 入力されたデータセット名は既に存在しています"
+
+#: EagleEye/classification/views.py:118
+msgid "dataset save : have to 2 classes"
+msgstr "データセット保存 : データセット保存には2クラス以上必要です"
+
+#: EagleEye/classification/views.py:123 EagleEye/objectdetection/views.py:146
+msgid "dataset save : The number of classes({}) exceeds the maximum value({})"
+msgstr "データセット保存 : 入力クラス数({})が最大クラス数({})を超えています"
+
+#: EagleEye/classification/views.py:128
+msgid "dataset save : some classes are less than 10 images"
+msgstr "データセット保存 : 1クラス当たり10枚以上の画像が必要です"
+
+#: EagleEye/classification/views.py:138 EagleEye/objectdetection/views.py:162
+msgid "dataset save : success"
+msgstr "データセット保存 : 保存完了"
+
+#: EagleEye/classification/views.py:211 EagleEye/objectdetection/views.py:321
+msgid "dataset import : success"
+msgstr "データセットインポート : インポート完了"
+
+#: EagleEye/objectdetection/views.py:105
+msgid "dataset save : This name already exist"
+msgstr "データセット保存 : データセット名が重複しています"
+
+#: EagleEye/objectdetection/views.py:156
+msgid "dataset save : dataset are less than 10 images"
+msgstr "データセット保存 : データセット内の画像が10枚以下です"
+
+#: EagleEye/objectdetection/views.py:165
+msgid "dataset save : csv file does not exist"
+msgstr "データセット保存 : csvファイルが存在しません"
+
+#: EagleEye/objectdetection/views.py:168
+msgid "dataset save : multiple csv files"
+msgstr "データセット保存 : csvファイルが複数存在しています"
+
+#: EagleEye/objectdetection/views.py:198
+msgid "dataset import : .ds file not found"
+msgstr "データセットインポート : dsファイルが存在しません"
+
+#: EagleEye/objectdetection/views.py:218
+msgid "dataset import : This dataset name already exist"
+msgstr "データセットインポート : データセット名が重複しています"
+
+#: EagleEye/objectdetection/views.py:316
+msgid "dataset import : error"
+msgstr "デタセットインポート : エラー"
+
+#: EagleEye/templates/classification/classification.html:36
+msgid "Classification"
+msgstr "画像分類"
+
+#: EagleEye/templates/classification/classification.html:36
+msgid "Object Detection"
+msgstr "物体検知"
+
+#: EagleEye/templates/classification/classification.html:37
+#: EagleEye/templates/objectdetection/objectdetection.html:37
+msgid "Project Name"
+msgstr "プロジェクト名"
+
+#: EagleEye/templates/classification/classification.html:47
+#: EagleEye/templates/classification/classification.html:252
+#: EagleEye/templates/objectdetection/objectdetection.html:48
+#: EagleEye/templates/objectdetection/objectdetection.html:252
+msgid "Dataset"
+msgstr "データセット"
+
+#: EagleEye/templates/classification/classification.html:63
+#: EagleEye/templates/classification/classification.html:193
+#: EagleEye/templates/objectdetection/objectdetection.html:64
+#: EagleEye/templates/objectdetection/objectdetection.html:191
+msgid "Dataset Name"
+msgstr "データセット名"
+
+#: EagleEye/templates/classification/classification.html:66
+#: EagleEye/templates/classification/classification.html:131
+#: EagleEye/templates/objectdetection/objectdetection.html:67
+#: EagleEye/templates/objectdetection/objectdetection.html:129
+msgid "Date Created"
+msgstr "作成日"
+
+#: EagleEye/templates/classification/classification.html:69
+#: EagleEye/templates/objectdetection/objectdetection.html:70
+msgid "Classes"
+msgstr "クラス数"
+
+#: EagleEye/templates/classification/classification.html:91
+#: EagleEye/templates/classification/classification.html:175
+#: EagleEye/templates/classification/classification.html:213
+#: EagleEye/templates/classification/classification.html:292
+#: EagleEye/templates/objectdetection/objectdetection.html:92
+#: EagleEye/templates/objectdetection/objectdetection.html:174
+#: EagleEye/templates/objectdetection/objectdetection.html:212
+#: EagleEye/templates/objectdetection/objectdetection.html:292
+msgid "Memo"
+msgstr "メモ"
+
+#: EagleEye/templates/classification/classification.html:103
+#: EagleEye/templates/objectdetection/objectdetection.html:104
+msgid "Model"
+msgstr "モデル"
+
+#: EagleEye/templates/classification/classification.html:115
+#: EagleEye/templates/objectdetection/objectdetection.html:116
+msgid "Run Test"
+msgstr "モデル評価"
+
+#: EagleEye/templates/classification/classification.html:118
+msgid "View Report"
+msgstr "結果確認"
+
+#: EagleEye/templates/classification/classification.html:121
+#: EagleEye/templates/objectdetection/objectdetection.html:119
+msgid "Model Download"
+msgstr "モデルをダウンロード"
+
+#: EagleEye/templates/classification/classification.html:128
+#: EagleEye/templates/classification/classification.html:259
+#: EagleEye/templates/objectdetection/objectdetection.html:126
+#: EagleEye/templates/objectdetection/objectdetection.html:259
+msgid "Model Name"
+msgstr "モデル名"
+
+#: EagleEye/templates/classification/classification.html:134
+#: EagleEye/templates/objectdetection/objectdetection.html:132
+msgid "Use Dataset"
+msgstr "使用データセット名"
+
+#: EagleEye/templates/classification/classification.html:137
+#: EagleEye/templates/classification/classification.html:338
+#: EagleEye/templates/objectdetection/objectdetection.html:135
+#: EagleEye/templates/objectdetection/objectdetection.html:317
+msgid "Image Type"
+msgstr "画像タイプ"
+
+#: EagleEye/templates/classification/classification.html:140
+#: EagleEye/templates/classification/classification.html:277
+#: EagleEye/templates/objectdetection/objectdetection.html:138
+#: EagleEye/templates/objectdetection/objectdetection.html:277
+msgid "Architecture"
+msgstr "アーキテクチャ"
+
+#: EagleEye/templates/classification/classification.html:143
+#: EagleEye/templates/classification/classification.html:262
+#: EagleEye/templates/classification/classification.html:368
+#: EagleEye/templates/objectdetection/objectdetection.html:141
+#: EagleEye/templates/objectdetection/objectdetection.html:262
+#: EagleEye/templates/objectdetection/objectdetection.html:344
+msgid "Epochs"
+msgstr "エポック数"
+
+#: EagleEye/templates/classification/classification.html:146
+#: EagleEye/templates/classification/classification.html:265
+#: EagleEye/templates/objectdetection/objectdetection.html:144
+#: EagleEye/templates/objectdetection/objectdetection.html:265
+msgid "Batch Size"
+msgstr "バッチサイズ"
+
+#: EagleEye/templates/classification/classification.html:149
+#: EagleEye/templates/classification/classification.html:280
+#: EagleEye/templates/objectdetection/objectdetection.html:147
+#: EagleEye/templates/objectdetection/objectdetection.html:280
+msgid "Learning Rate"
+msgstr "学習率"
+
+#: EagleEye/templates/classification/classification.html:152
+#: EagleEye/templates/classification/classification.html:283
+#: EagleEye/templates/objectdetection/objectdetection.html:150
+#: EagleEye/templates/objectdetection/objectdetection.html:283
+msgid "Optimizer"
+msgstr "最適化関数"
+
+#: EagleEye/templates/classification/classification.html:155
+#: EagleEye/templates/objectdetection/objectdetection.html:159
+msgid "Status"
+msgstr "状態"
+
+#: EagleEye/templates/classification/classification.html:158
+#: EagleEye/templates/objectdetection/objectdetection.html:162
+msgid "Last Epoced"
+msgstr "最終エポック"
+
+#: EagleEye/templates/classification/classification.html:177
+#: EagleEye/templates/objectdetection/objectdetection.html:176
+msgid "Graph"
+msgstr "グラフ"
+
+#: EagleEye/templates/classification/classification.html:191
+#: EagleEye/templates/objectdetection/objectdetection.html:189
+msgid "Create New Dataset"
+msgstr "新しいデータセットを作成"
+
+msgid "Create New Model"
+msgstr "新しいモデルを作成"
+
+msgid "Delete Dataset"
+msgstr "データセットを削除"
+
+msgid "Delete Model"
+msgstr "モデルを削除"
+
+#: EagleEye/templates/classification/classification.html:196
+#: EagleEye/templates/classification/classification.html:227
+#: EagleEye/templates/classification/classification.html:458
+#: EagleEye/templates/objectdetection/objectdetection.html:194
+#: EagleEye/templates/objectdetection/objectdetection.html:227
+#: EagleEye/templates/objectdetection/objectdetection.html:433
+msgid "Directory"
+msgstr "フォルダを選択"
+
+#: EagleEye/templates/classification/classification.html:218
+#: EagleEye/templates/objectdetection/objectdetection.html:218
+msgid "Create Dataset"
+msgstr "データセット作成"
+
+#: EagleEye/templates/classification/classification.html:223
+#: EagleEye/templates/objectdetection/objectdetection.html:223
+msgid "Import Dataset from Legacy DeepEye"
+msgstr "旧DeepEyeからデータセットをインポート"
+
+#: EagleEye/templates/classification/classification.html:232
+#: EagleEye/templates/objectdetection/objectdetection.html:232
+msgid "Import Dataset"
+msgstr "データセットインポート"
+
+#: EagleEye/templates/classification/classification.html:249
+#: EagleEye/templates/objectdetection/objectdetection.html:249
+msgid "Model Options"
+msgstr "モデル設定"
+
+#: EagleEye/templates/classification/classification.html:268
+#: EagleEye/templates/objectdetection/objectdetection.html:268
+msgid "Change ratio"
+msgstr "データ割合変更"
+
+#: EagleEye/templates/classification/classification.html:296
+#: EagleEye/templates/objectdetection/objectdetection.html:296
+msgid "Fine Tuning"
+msgstr "ファインチューニング"
+
+#: EagleEye/templates/classification/classification.html:302
+#: EagleEye/templates/objectdetection/objectdetection.html:302
+msgid "Augmentation (Optional)"
+msgstr "データ拡張(オプション)"
+
+#: EagleEye/templates/classification/classification.html:305
+#: EagleEye/templates/classification/classification.html:507
+msgid "horizontal flip"
+msgstr "水平反転"
+
+#: EagleEye/templates/classification/classification.html:308
+#: EagleEye/templates/classification/classification.html:510
+msgid "vertical flip"
+msgstr "垂直反転"
+
+#: EagleEye/templates/classification/classification.html:314
+#: EagleEye/templates/classification/classification.html:516
+msgid "rotate 30°step"
+msgstr "30度毎回転"
+
+#: EagleEye/templates/classification/classification.html:317
+#: EagleEye/templates/classification/classification.html:519
+msgid "rotate 45°step"
+msgstr "45度毎回転"
+
+#: EagleEye/templates/classification/classification.html:320
+#: EagleEye/templates/classification/classification.html:522
+msgid "rotate 90°step"
+msgstr "90度毎回転"
+
+#: EagleEye/templates/classification/classification.html:326
+msgid "contrast(Hi&Low)"
+msgstr "コントラスト(高&低)"
+
+#: EagleEye/templates/classification/classification.html:329
+#: EagleEye/templates/classification/classification.html:534
+msgid "gaussian noise"
+msgstr "ガウシアンノイズ"
+
+#: EagleEye/templates/classification/classification.html:332
+#: EagleEye/templates/classification/classification.html:537
+msgid "blur"
+msgstr "ブラー"
+
+#: EagleEye/templates/classification/classification.html:342
+msgid "View Augmentation Sample"
+msgstr "データ拡張サンプルを確認"
+
+#: EagleEye/templates/classification/classification.html:349
+msgid "Train Start"
+msgstr "学習開始"
+
+#: EagleEye/templates/classification/classification.html:358
+#: EagleEye/templates/objectdetection/objectdetection.html:334
+msgid "Training"
+msgstr "学習中"
+
+#: EagleEye/templates/classification/classification.html:365
+#: EagleEye/templates/objectdetection/objectdetection.html:341
+msgid "Process"
+msgstr "処理内容"
+
+#: EagleEye/templates/classification/classification.html:379
+#: EagleEye/templates/objectdetection/objectdetection.html:352
+msgid "Batch"
+msgstr "バッチ"
+
+#: EagleEye/templates/classification/classification.html:379
+#: EagleEye/templates/objectdetection/objectdetection.html:352
+msgid "Iteration"
+msgstr "イテレーション"
+
+#: EagleEye/templates/classification/classification.html:392
+#: EagleEye/templates/objectdetection/objectdetection.html:362
+msgid "Stop Training"
+msgstr "学習中止"
+
+#: EagleEye/templates/classification/classification.html:401
+#: EagleEye/templates/objectdetection/objectdetection.html:372
+msgid "Test Model"
+msgstr "モデル評価"
+
+msgid "Test Result"
+msgstr "テスト結果"
+
+#: EagleEye/templates/classification/classification.html:404
+#: EagleEye/templates/objectdetection/objectdetection.html:375
+msgid "Use Self Dataset"
+msgstr "学習時に使用したデータセットを使用してテスト"
+
+#: EagleEye/templates/classification/classification.html:425
+#: EagleEye/templates/classification/classification.html:446
+#: EagleEye/templates/classification/classification.html:464
+#: EagleEye/templates/objectdetection/objectdetection.html:398
+#: EagleEye/templates/objectdetection/objectdetection.html:421
+#: EagleEye/templates/objectdetection/objectdetection.html:442
+msgid "Test Start"
+msgstr "テスト開始"
+
+#: EagleEye/templates/classification/classification.html:432
+#: EagleEye/templates/objectdetection/objectdetection.html:405
+msgid "Use Saved Dataset"
+msgstr "他のデータセットを使用してテスト"
+
+#: EagleEye/templates/classification/classification.html:453
+#: EagleEye/templates/objectdetection/objectdetection.html:428
+msgid "Test on custom uploaded files"
+msgstr "アップロードファイルでを使用してテスト"
+
+#: EagleEye/templates/classification/classification.html:475
+msgid "Report"
+msgstr "評価確認"
+
+#: EagleEye/templates/classification/classification.html:498
+msgid "DataAugmentation Sample"
+msgstr "データ拡張サンプル"
+
+#: EagleEye/templates/classification/classification.html:501
+msgid "original"
+msgstr "オリジナル"
+
+#: EagleEye/templates/classification/classification.html:528
+msgid "Hi Contrast"
+msgstr "コントラスト増加"
+
+#: EagleEye/templates/classification/classification.html:531
+msgid "Lo Contrast"
+msgstr "コントラスト低下"
+
+#: EagleEye/templates/home.html:25
+msgid "Choose the type of Machine Learning to be performed."
+msgstr "アーキテクチャを選択してください"
+
+#: EagleEye/templates/home.html:68 EagleEye/templates/home.html:113
+msgid "Creat a new project or choose from an existing one"
+msgstr "新規プロジェクトを作成するか既存プロジェクトを開いてください"
+
+#: EagleEye/templates/home.html:74 EagleEye/templates/home.html:119
+msgid "New Project"
+msgstr "新規プロジェクト"
+
+#: EagleEye/templates/home.html:78 EagleEye/templates/home.html:123
+msgid "Creat New"
+msgstr "プロジェクトを作成"
+
+#: EagleEye/templates/home.html:89 EagleEye/templates/home.html:134
+msgid "Existing Projects"
+msgstr "既存のプロジェクトを開く"
+
+#: EagleEye/templates/home.html:92 EagleEye/templates/home.html:137
+msgid "Select Project"
+msgstr "プロジェクトを選択"
+
+#: EagleEye/templates/home.html:97 EagleEye/templates/home.html:142
+msgid "No Existing Projects"
+msgstr "プロジェクトなし"
+
+#: EagleEye/templates/home.html:102 EagleEye/templates/home.html:147
+msgid "Choose Existing"
+msgstr "プロジェクトを開く"
+
+#: EagleEye/templates/home.html:103 EagleEye/templates/home.html:148
+msgid "Delete"
+msgstr "削除"
+
+msgid "Close"
+msgstr "閉じる"
+
+msgid "Back"
+msgstr "戻る"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Cancel"
+msgstr "キャンセル"
+
+#: EagleEye/templates/objectdetection/objectdetection.html:36
+msgid "Project Type"
+msgstr "プロジェクトタイプ"
+
+#: EagleEye/templates/objectdetection/objectdetection.html:153
+#: EagleEye/templates/objectdetection/objectdetection.html:305
+msgid "Split Size"
+msgstr "分割サイズ"
+
+#: EagleEye/templates/objectdetection/objectdetection.html:156
+#: EagleEye/templates/objectdetection/objectdetection.html:311
+msgid "Overlap Size"
+msgstr "重複サイズ"
+
+#: EagleEye/templates/objectdetection/objectdetection.html:396
+#: EagleEye/templates/objectdetection/objectdetection.html:419
+#: EagleEye/templates/objectdetection/objectdetection.html:440
+msgid "threshold"
+msgstr "閾値"
+
+msgid "No Dataset"
+msgstr "データセットがありません"
+
+msgid "No Model"
+msgstr "モデルがありません"
+
+msgid "Data set {} is in use and cannot be deleted."
+msgstr "データセット {} は使用されているため削除できません。"
+
+msgid "The image directory should be specified with the following directory structure."
+msgstr "画像ディレクトリは、以下のディレクトリ構造で指定してください。"
+
+msgid "finished"
+msgstr "完了"
+
+msgid "stopped"
+msgstr "キャンセル"
+
+msgid "This model cannot be used with Fine Tuning."
+msgstr "Fine Tuningで使用できないモデルです。"
+
+msgid "train data is not enough.(check batch size and dataset ratio)"
+msgstr "Trainデータが不足しています（バッチサイズやデータセット比率を確認してください）。"

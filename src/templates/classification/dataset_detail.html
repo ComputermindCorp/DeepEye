@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% block title %}Classification | Main{% endblock title %}
+{% block content %}
+{% load widget_tweaks %}
+{% load static %}
+{% csrf_token %}
+{% load i18n %}
+
+<div class="row mt-2 mb-2">
+  <!-- Dataset information(Left) -->
+  <div class="col">
+    <table>
+      <tbody>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Dataset Name' %}</td>
+          <td class="pt-0 pb-1">{{ dataset.name }}</td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Classes' %}</td>
+          <td class="pt-0 pb-1">{{ dataset.classes }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Dataset information(Center) -->
+  <div class="col">
+    <table>
+      <tbody>
+        <tr>
+          <td class="pt-0 pb-1" style="width: 150px;">総データ数</td>
+          <td class="pt-0 pb-1" style="width: 50px;">{{ n_all_data }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">Train</td>
+          <td class="pt-0 pb-1">{{ n_train_data }}</td>
+          <td class="pt-0 pb-1">({{ train_ratio }}%)</td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">Validation</td>
+          <td class="pt-0 pb-1">{{ n_val_data }}</td>
+          <td class="pt-0 pb-1">({{ val_ratio }}%)</td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">Test</td>
+          <td class="pt-0 pb-1">{{ n_test_data }}</td>
+          <td class="pt-0 pb-1">({{ test_ratio }}%)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Dataset information(Right) -->
+  <div class="col">
+    <div id="class-list" class="mb-5 list-box scroll-y">
+      <div class="list-group">
+        {% for cls in class_list %}
+        <div>[{{ forloop.counter0 }}] {{ cls }} </div>
+        {% empty %}
+        <div>{% trans 'No Model' %}</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Back button -->
+<div class="row mb-4">
+  <div class="col">
+    <a type="button" href="{{request.META.HTTP_REFERER}}" class="btn btn-secondary">{% trans 'Back' %}</a>
+  </div>
+</div>
+
+<!-- Tab Header -->
+<div class="row">
+  <div class="col">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a href="#train-tab" class="nav-link active" data-toggle="tab">Train</a>
+      </li>
+      <li class="nav-item">
+        <a href="#val-tab" class="nav-link" data-toggle="tab">Validation</a>
+      </li>
+      <li class="nav-item">
+        <a href="#test-tab" class="nav-link" data-toggle="tab">Test</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<!-- Image filename list & Preview -->
+<div class="tab-content">
+  <!-- Train Preview -->
+  <div id="train-tab" class="tab-pane active">
+    <div class="row">
+      <!-- Image Data List -->
+      <div class="col">
+        <div id="train-data-list" class="mb-5">
+          <div class="list-group scroll-y list-box-m">
+            {% for data in train_data_list %}
+              <button type="button" id="train_{{ forloop.counter0 }}" value="{{ forloop.counter0 }}" class="list-group-item list-group-item-action py-1">[{{ forloop.counter}}] [{{ data.image_data.class_data.name }}] {{ data.image_data.name }}</button>
+            {% empty %}
+              <div>{% trans 'No Model' %}</div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <!-- Preview -->
+      <div class="col">
+        <a href="" id="train-data-preview-link" target="_blank"><img id="train-data-preview" class="img-fluid"></a>
+      </div>
+    </div>
+  </div>
+  <!-- Validation Preview -->
+  <div id="val-tab" class="tab-pane">
+    <div class="row">
+      <!-- Image Data List -->
+      <div class="col w-100">
+        <div id="val-data-list" class="mb-5">
+          <div class="list-group scroll-y list-box">
+            {% for data in val_data_list %}
+              <button type="button" id="val_{{ forloop.counter0 }}" value="{{ forloop.counter0 }}" class="list-group-item list-group-item-action py-1">[{{ forloop.counter}}] [{{ data.image_data.class_data.name }}] {{ data.image_data.name }}</button>
+            {% empty %}
+              <div>{% trans 'No Model' %}</div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <!-- Preview -->
+      <div class="col">
+        <a href="" id="val-data-preview-link" target="_blank"><img id="val-data-preview" class="img-fluid"></a>
+      </div>
+    </div>
+  </div>
+  <!-- Test Preview -->
+  <div id="test-tab" class="tab-pane">
+    <div class="row">
+      <!-- Image Data List -->
+      <div class="col w-100">
+        <div id="test-data-list" class="mb-5">
+          <div class="list-group scroll-y list-box">
+            {% for data in test_data_list %}
+              <button type="button" id="test_{{ forloop.counter0 }}" value="{{ forloop.counter0 }}" class="list-group-item list-group-item-action py-1">[{{ forloop.counter}}] [{{ data.image_data.class_data.name }}] {{ data.image_data.name }}</button>
+            {% empty %}
+              <div>{% trans 'No Model' %}</div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <!-- Preview -->
+      <div class="col">
+        <a href="" id="test-data-preview-link" target="_blank"><img id="test-data-preview" class="img-fluid"></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+<!--==================== javascript ====================-->
+{% block javascript %}
+<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+<script type="text/javascript">
+
+  const train_image_path_list = {{ train_image_path_list | safe }};
+  const val_image_path_list = {{ val_image_path_list | safe }};
+  const test_image_path_list = {{ test_image_path_list | safe }};
+  let selectedTrainDataId = null;
+  let selectedValDataId = null;
+  let selectedTestDataId = null;
+
+  $(window).bind('load', function () {
+    // click train-data list.
+    $('#train-data-list button').on('click', function (e) {
+      selectedTrainDataId = e.target.value;
+      $('#train-data-preview').attr('src', train_image_path_list[selectedTrainDataId]);
+      $('#train-data-preview-link').attr('href', train_image_path_list[selectedTrainDataId]);
+
+      e.preventDefault();
+      $(this).tab('show');
+    })
+
+    // click val-data list.
+    $('#val-data-list button').on('click', function (e) {
+      selectedValDataId = e.target.value;
+      $('#val-data-preview').attr('src', val_image_path_list[selectedValDataId]);
+      $('#val-data-preview-link').attr('href', val_image_path_list[selectedValDataId]);
+
+      e.preventDefault();
+      $(this).tab('show');
+    })
+
+    // click val-data list.
+    $('#test-data-list button').on('click', function (e) {
+      selectedTestDataId = e.target.value;
+      $('#test-data-preview').attr('src', test_image_path_list[selectedTestDataId]);
+      $('#test-data-preview-link').attr('href', test_image_path_list[selectedTestDataId]);
+
+      e.preventDefault();
+      $(this).tab('show');
+    })
+
+    // train-data
+    let n_train_data = $('#train-data-list button').length
+    if (n_train_data > 0) {
+      selectedTrainDataId = $('#train-data-list button')[0].value;
+      $('#' + $('#train-data-list button')[0].id).trigger('click')
+    } else {
+      selectedTrainDataId = null;
+    }
+
+    // val-data
+    let n_val_data = $('#val-data-list button').length
+    if (n_val_data > 0) {
+      selectedValDataId = $('#val-data-list button')[0].value;
+      $('#' + $('#val-data-list button')[0].id).trigger('click')
+    } else {
+      selectedValDataId = null;
+    }
+
+    // test-data
+    let n_test_data = $('#test-data-list button').length
+    if (n_test_data > 0) {
+      selectedTestDataId = $('#test-data-list button')[0].value;
+      $('#' + $('#test-data-list button')[0].id).trigger('click')
+    } else {
+      selectedTestDataId = null;
+    }
+  });
+
+</script>
+{% endblock javascript %}

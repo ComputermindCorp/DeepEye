@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}DeepEye{% endblock title %}
+{% block content %}
+{% load widget_tweaks %}
+{% load static %}
+{% csrf_token %}
+{% load i18n %}
+
+<div class="mx-5">
+  <div class="row">
+    <div class="col"></div>
+    <div class="col">
+      <h3 class="text-center mt-4 mb-4">{{ title }}</h3>
+      <div class="mb-5">{% trans 'Creat a new project or choose from an existing one' %}</div>
+
+      <form method="post" enctype="multipart/form-data" id="project-setting-form">
+        {% csrf_token %}
+        <div>
+          <label>{% trans 'New Project' %}</label>
+          {{ project_form.name | add_class:"form-control mb-2" }}
+          {{ project_form.name.errors }}
+          {{ project_form.project_type.as_hidden }}
+          <button type="submit" id="new-project" class="btn btn-primary mb-5">{% trans "Creat New" %}</button>
+        </div>
+        <div>
+          {% csrf_token %}
+          <label>{% trans "Existing Projects" %}</label>
+          <select id="selected-project" class="form-control mb-2" name="">
+            {% if n_project  > 0 %}
+            <option value="" disabled selected>{% trans "Select Project" %}</option>
+            {% for project in projects %}
+            <option value="{{project.id}}">{{project.name}}</option>
+            {% endfor %}
+            {% else %}
+            <option value="" disabled selected>{% trans "No Existing Projects"%}</option>
+            {% endif %}
+          </select>
+          {{ classification_projects.project_type.as_hidden }}
+          <button type="button" name="go-main" class="btn btn-primary" id="go-main">{% trans "Choose Existing" %}</button>
+          <button type="button" name="delete-project" class="btn btn-primary" id="delete-project-button">{% trans "Delete" %}</button>
+        </div>
+      </form>
+    </div>
+    <div class="col"></div>
+  </div>
+</div>
+
+<!-- Alert Dialog -->
+{% include 'alert.html' %}
+
+{% endblock %}
+
+<!--==================== javascript ====================-->
+{% block javascript %}
+
+<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+<script type="text/javascript">
+
+  // go classification
+  document.querySelector('#go-main').onclick = function () {
+    let selected_value = document.getElementById("selected-project").value
+    if (selected_value === "") return;
+
+    document.forms['project-setting-form'].action = "classification/" + selected_value;
+    document.forms['project-setting-form'].submit();
+  }
+  
+  //delete_classification_project
+  document.querySelector('#delete-project-button').onclick = function () {
+    let selected_value = document.getElementById("selected-project").value
+    if (selected_value === "") return;
+
+    show_confirm(gettext("Notice"), gettext("Delete Selected Project.\nThis operation cannot be restored.\nIs it OK?"), function (result) {
+      if (result) {
+        document.forms['project-setting-form'].action = "delete_project/" + selected_value;
+        document.forms['project-setting-form'].submit();
+      }
+    });
+  }
+
+</script>
+{% endblock %}

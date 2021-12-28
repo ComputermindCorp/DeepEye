@@ -1,0 +1,262 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-11-04 16:58+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: EagleEye/templates/classification/classification.html:586
+#: EagleEye/templates/classification/classification.html:607
+#: EagleEye/templates/objectdetection/objectdetection.html:495
+#: EagleEye/templates/objectdetection/objectdetection.html:516
+msgid "No Existing Datasets"
+msgstr "データセットなし"
+
+#: EagleEye/templates/classification/classification.html:643
+#: EagleEye/templates/objectdetection/objectdetection.html:552
+msgid "No Existing Models"
+msgstr "モデルなし"
+
+#: EagleEye/templates/classification/classification.html:665
+#: EagleEye/templates/objectdetection/objectdetection.html:574
+msgid "No Datasets for testing"
+msgstr "テストデータセットなし"
+
+#: EagleEye/templates/classification/classification.html:724
+#: EagleEye/templates/objectdetection/objectdetection.html:629
+msgid ""
+"delete dataset.\n"
+"Is it OK?"
+msgstr ""
+"データセットを削除します。\n"
+"よろしいですか？"
+
+#: EagleEye/templates/classification/classification.html:741
+#: EagleEye/templates/objectdetection/objectdetection.html:646
+msgid ""
+"delete model.\n"
+"Is it OK?"
+msgstr ""
+"モデルを削除します。\n"
+"よろしいですか？"
+
+#: EagleEye/templates/classification/classification.html:757
+#: EagleEye/templates/objectdetection/objectdetection.html:661
+msgid "Selected model training is not completed"
+msgstr "選択したモデルは学習が完了していません。"
+
+#: EagleEye/templates/classification/classification.html:771
+msgid ""
+"No model is selected\n"
+"or \n"
+"Selected model has no report"
+msgstr ""
+"モデルが選択されていません。\n"
+"または\n"
+"モデルにレポートが存在していません。"
+
+#: EagleEye/templates/classification/classification.html:905
+#: EagleEye/templates/classification/classification.html:1033
+#: EagleEye/templates/objectdetection/objectdetection.html:786
+#: EagleEye/templates/objectdetection/objectdetection.html:906
+msgid ""
+"There is wrong with the input value\n"
+"\n"
+msgstr ""
+"入力値に問題があります。\n"
+"\n"
+
+#: EagleEye/templates/classification/classification.html:910
+#: EagleEye/templates/objectdetection/objectdetection.html:791
+msgid "Enter a valid dataset name\n"
+msgstr "データセット名を入力してください\n"
+
+#: EagleEye/templates/classification/classification.html:917
+#: EagleEye/templates/objectdetection/objectdetection.html:798
+msgid "Enter dataset name is duplicate\n"
+msgstr "データセット名が重複しています\n"
+
+#: EagleEye/templates/classification/classification.html:927
+#: EagleEye/templates/classification/classification.html:1064
+#: EagleEye/templates/objectdetection/objectdetection.html:814
+#: EagleEye/templates/objectdetection/objectdetection.html:937
+msgid "Val value is abnormal.\n"
+msgstr "Valの値が正しくありません\n"
+
+#: EagleEye/templates/classification/classification.html:931
+#: EagleEye/templates/classification/classification.html:1068
+#: EagleEye/templates/objectdetection/objectdetection.html:818
+#: EagleEye/templates/objectdetection/objectdetection.html:941
+msgid "Test value is abnormal.\n"
+msgstr "Testの値が正しくありません\n"
+
+#: EagleEye/templates/classification/classification.html:935
+#: EagleEye/templates/classification/classification.html:1072
+#: EagleEye/templates/objectdetection/objectdetection.html:822
+#: EagleEye/templates/objectdetection/objectdetection.html:945
+msgid "Can't prepare Train Data.\n"
+msgstr "テストデータが確保できません\n"
+
+#: EagleEye/templates/classification/classification.html:941
+#: EagleEye/templates/objectdetection/objectdetection.html:804
+#: EagleEye/templates/objectdetection/objectdetection.html:828
+#: EagleEye/templates/objectdetection/objectdetection.html:1207
+msgid "Must be upload dataset\n"
+msgstr "データセットをアップロードしてください\n"
+
+#: EagleEye/templates/classification/classification.html:969
+#: EagleEye/templates/classification/classification.html:1362
+#: EagleEye/templates/objectdetection/objectdetection.html:854
+msgid "Must be upload dataset"
+msgstr "データセットをアップロードしてください"
+
+#: EagleEye/templates/classification/classification.html:1038
+#: EagleEye/templates/objectdetection/objectdetection.html:911
+msgid "Please select a dataset\n"
+msgstr "データセットを選択してください\n"
+
+#: EagleEye/templates/classification/classification.html:1044
+#: EagleEye/templates/objectdetection/objectdetection.html:917
+msgid "Enter a valid model name\n"
+msgstr "モデル名を入力してください\n"
+
+#: EagleEye/templates/classification/classification.html:1054
+#: EagleEye/templates/objectdetection/objectdetection.html:927
+msgid "Enter model name is duplicate\n"
+msgstr "モデル名が重複しています\n"
+
+#: EagleEye/templates/classification/classification.html:1275
+#: EagleEye/templates/objectdetection/objectdetection.html:1117
+msgid ""
+"stop learning,\n"
+"Is it OK?"
+msgstr ""
+"学習を停止します\n"
+"よろしいですか？"
+
+#: EagleEye/templates/classification/classification.html:1277
+#: EagleEye/templates/objectdetection/objectdetection.html:1119
+msgid "please wait epoch end"
+msgstr "エポック終了後学習を停止します"
+
+#: EagleEye/templates/classification/classification.html:1317
+#: EagleEye/templates/classification/classification.html:1335
+#: EagleEye/templates/objectdetection/objectdetection.html:1160
+#: EagleEye/templates/objectdetection/objectdetection.html:1179
+msgid "Must check at least one"
+msgstr "いずれかのタイプにチェックを入れてください"
+
+#: EagleEye/templates/classification/classification.html:1411
+#: EagleEye/templates/objectdetection/objectdetection.html:1257
+msgid ""
+"WebSocket disconnected!\n"
+"please check deepeye terminal!"
+msgstr ""
+"WebSocketが切断されました\n"
+"ターミナルを確認してください"
+
+#: EagleEye/templates/classification/classification.html:1523
+msgid "Filename"
+msgstr "ファイル名"
+
+#: EagleEye/templates/classification/classification.html:1526
+msgid "Image"
+msgstr "画像"
+
+#: EagleEye/templates/classification/classification.html:1529
+msgid "Result"
+msgstr "結果"
+
+#: EagleEye/templates/classification/classification.html:1532
+msgid "Label"
+msgstr "ラベル"
+
+#: EagleEye/templates/classification/classification.html:1535
+msgid "Predicted"
+msgstr "検出結果"
+
+#: EagleEye/templates/classification/classification.html:1637
+msgid "Class"
+msgstr "クラス名"
+
+#: EagleEye/templates/classification/classification.html:1641
+msgid "Accurate"
+msgstr "正答数"
+
+#: EagleEye/templates/classification/classification.html:1644
+#: EagleEye/templates/classification/classification.html:1702
+msgid "Total"
+msgstr "データ数"
+
+#: EagleEye/templates/classification/classification.html:1647
+msgid "Percentage"
+msgstr "正解率"
+
+#: EagleEye/templates/home.html:181
+msgid "Select Project"
+msgstr "プロジェクトを選択"
+
+#: EagleEye/templates/home.html:182
+msgid "No Existing Projects"
+msgstr "プロジェクトなし"
+
+#: EagleEye/templates/home.html:213 EagleEye/templates/home.html:230
+msgid ""
+"Delete Selected Project.\n"
+"This operation cannot be restored.\n"
+"Is it OK?"
+msgstr ""
+"プロジェクトを削除します\n"
+"この操作は取り消せません\n"
+"よろしいですか？"
+
+#: EagleEye/templates/objectdetection/objectdetection.html:954
+msgid "split size have to 0 or over 100\n"
+msgstr "分割サイズは0または100以上の値を入力してください\n"
+
+#: EagleEye/templates/objectdetection/objectdetection.html:959
+msgid "overlap size must be less than split size\n"
+msgstr "重複サイズは分割サイズ未満に設定してください\n"
+
+msgid "Notice"
+msgstr "確認"
+
+msgid "Warning"
+msgstr "警告"
+
+msgid "Start training model?"
+msgstr "学習を開始しますか？"
+
+msgid "Classification"
+msgstr "画像分類"
+
+msgid "Object Detection"
+msgstr "物体検知"
+
+msgid "Project Name"
+msgstr "プロジェクト名"
+
+msgid "Training ended"
+msgstr "学習が完了しました"
+
+msgid "Training canceled"
+msgstr "学習をキャンセルしました"
+
+msgid "finished"
+msgstr "完了"
+
+msgid "stopped"
+msgstr "キャンセル"

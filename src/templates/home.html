@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}DeepEye{% endblock title %}
+{% load widget_tweaks %}
+{% load i18n %}
+
+<!-- error messages -->
+{% if messages %}
+<ul class="messages_ul">
+  {% for message in messages %}
+  <label class="alert{% if message.tags %} alert-{{ message.tags }}{% endif %}" role="alert">{{ message | linebreaksbr }}</label>
+  <br>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% block content %}
+<!--Top Form-->
+<div class="mx-auto" style="width: 600px;">
+  <h1 class="text-center my-5">DeepEye</h1>
+  <h5 class="text-center my-5">{% trans "Choose the type of Machine Learning to be performed." %}</h5>
+
+  <div class="card-deck">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{% trans 'Classification' %}</h5>
+        <p class="card-text">画像分類のモデルを作成・評価します。</p>
+        <form action="project_setting" method="GET">
+          <input type="hidden" name="project_type" value="0">
+          <button type="submit" class="btn btn-primary">開始</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

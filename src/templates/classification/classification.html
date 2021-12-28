@@ -1,0 +1,436 @@
+{% extends 'base.html' %}
+{% block title %}Classification | Main{% endblock title %}
+{% block content %}
+{% load widget_tweaks %}
+{% load static %}
+{% csrf_token %}
+{% load i18n %}
+
+<!-- Alert messages -->
+{% if messages %}
+{% for message in messages %}
+<div class="alert{% if message.tags %} alert-{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+  {{ message | linebreaksbr }}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+{% endif %}
+
+<!-- Dataset -->
+<div class="row mt-4 mb-2">
+  <!-- Dataset Header-->
+  <div class="col d-flex .align-items-center">
+    <span class="h5 mr-5">{% trans "Dataset" %}</span>
+    <a href="create_dataset/{{project_id}}" data-toggle="tooltip" data-placement="top" data-delay="500" title="{% trans 'Create New Dataset' %}"><img class="mr-1" src="{% static 'img/icons/icon_add.svg' %}" width="24" height="24" alt="add"></a>
+    <form id="delete-dataset-form">
+      <a href="#" id="delete-dataset-button" data-toggle="tooltip" data-placement="top" data-delay="500" title="{% trans 'Delete Dataset' %}"><img class="mr-1" src="{% static 'img/icons/icon_delete.svg' %}" width="24" height="24" alt="delete"></a>
+    </form>
+  </div>
+</div>
+<div class="row mb-4">
+  <div class="col">
+    <!-- Dataset List-->
+    <div id="dataset-list" class="list-box-s scroll-y">
+      <div class="list-group">
+        {% for ds in datasets %}
+        <button type="button" id="dataset_{{ ds.id }}" value="{{ ds.id }}" class="list-group-item list-group-item-action py-1">{{ ds.name }}</button>
+        {% empty %}
+        <div>{% trans 'No Dataset' %}</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <!-- Dataset Info-->
+    {% if datasets %}
+    <table class="table table-borderless">
+      <tbody>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Dataset Name' %}</td>
+          <td class="pt-0 pb-1">
+            <a href="" id="dataset-name"></a>
+          </td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Date Created' %}</td>
+          <td class="pt-0 pb-1" id="created-on"></td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Classes' %}</td>
+          <td class="pt-0 pb-1" id="classes"></td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">データ数</td>
+          <td class="pt-0 pb-1" id="n_data"></td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">Train</td>
+          <td class="pt-0 pb-1">
+            <div class="progress">
+              <div id="default_train_ratio" class="progress-bar" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100">0%</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">Validation</td>
+          <td class="pt-0 pb-1">
+            <div class="progress">
+              <div id="default_val_ratio" class="progress-bar" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100">0%</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">Test</td>
+          <td class="pt-0 pb-1">
+            <div class="progress">
+              <div id="default_test_ratio" class="progress-bar" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100">0%</div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
+  <div class="col">
+    <!-- Dataset Memo-->
+    <label for="dataset-memo">{% trans 'Memo' %}</label>
+    <textarea id="dataset-memo" class="form-control" rows="5" style="resize: none;" readonly></textarea>
+  </div>
+</div>
+
+<!-- Model -->
+<!-- Model Header-->
+<div class="row">
+  <div class="col d-flex .align-items-center">
+    <span class="h5 mr-5">{% trans "Model" %}</span>
+    <a href="create_model/{{project_id}}" data-toggle="tooltip" data-placement="top" data-delay="500" title="{% trans 'Create New Model' %}"><img class="mr-1" src="{% static 'img/icons/icon_add.svg' %}" width="24" height="24" alt="add"></a>
+    <form id="delete-model-form">
+      <a href="#" id="delete-model-button" data-toggle="tooltip" data-placement="top" data-delay="500" title="{% trans 'Delete Model' %}"><img class="mr-1" src="{% static 'img/icons/icon_delete.svg' %}" width="24" height="24" alt="delete"></a>
+    </form>
+    <form id="test-model-form" method="GET">
+      <a href="#" id="test-model" data-toggle="tooltip" data-placement="top" data-delay="500" title="{% trans 'Run Test' %}"><img class="mr-1" src="{% static 'img/icons/icon_predict.svg' %}" width="24" height="24" alt="test"></a>
+    </form>
+    <a href="#" id="model-download" data-toggle="tooltip" data-placement="top" data-delay="500" title="{% trans 'Model Download' %}"><img class="mr-1" src="{% static 'img/icons/icon_download.svg' %}" width="24" height="24" alt="download"></a>
+  </div>
+</div>
+<div class="row mb-4">
+  <div class="col">
+    <!-- Model List-->
+    <div id="model-list" class="mb-5 list-box-s scroll-y">
+      <div class="list-group">
+        {% for model in models %}
+        <button type="button" id="model_{{ model.id }}" value="{{ model.id }}" class="list-group-item list-group-item-action py-1">{{ model.name }}</button>
+        {% empty %}
+        <div>{% trans 'No Model' %}</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Model Info-->
+  <div class="col">
+    {% if models %}
+    <table class="table table-borderless">
+      <tbody>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Model Name' %}</td>
+          <td class="pt-0 pb-1" id="model-name"></td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Date Created' %}</td>
+          <td class="pt-0 pb-1" id="model-created-on"></td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Use Dataset' %}</td>
+          <td class="pt-0 pb-1">
+            <a id="use-dataset-name"></a>
+          </td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Image Type' %}</td>
+          <td class="pt-0 pb-1" id="image-type"></td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Architecture' %}</td>
+          <td class="pt-0 pb-1" id="architecture-type"></td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Epochs' %}</td>
+          <td class="pt-0 pb-1" id="epochs"></td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Batch Size' %}</td>
+          <td class="pt-0 pb-1" id="batch-size"></td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Learning Rate' %}</td>
+          <td class="pt-0 pb-1" id="learning-rate"></td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Optimizer' %}</td>
+          <td class="pt-0 pb-1" id="optimizer"></td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Status' %}</td>
+          <td class="pt-0 pb-1" id="train-status"></td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Last Epoced' %}</td>
+          <td class="pt-0 pb-1" id="epochs-runned"></td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Train Loss' %}</td>
+          <td class="pt-0 pb-1" id="train-loss"></td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Train Acc' %}</td>
+          <td class="pt-0 pb-1" id="train-acc"></td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Val Loss' %}</td>
+          <td class="pt-0 pb-1" id="val-loss"></td>
+        </tr>
+        <tr>
+          <td class="pt-0 pb-1">{% trans 'Val Acc' %}</td>
+          <td class="pt-0 pb-1" id="val-acc"></td>
+        </tr>
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
+  <div class="col">
+    <!-- Model Memo-->
+    <div class="mb-3">
+      <label for="model-memo">{% trans 'Memo' %}</label>
+      <textarea id="model-memo" class="form-control" rows="5" style="resize: none;" readonly></textarea>
+    </div>
+    <!-- Train Graph -->
+    <div class="mb-3">
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Alert Dialog -->
+{% include 'alert.html' %}
+
+{% endblock %}
+
+<!--==================== javascript ====================-->
+{% block javascript %}
+<!-- classification.html -->
+<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+<script type="text/javascript" src="{% static 'js/train_chart.js' %}"></script>
+<script type="text/javascript">
+
+  let project_name = "{{ project_name }}";
+  let project_id = "{{ project_id }}";
+  let selectedDataset = null;
+  let selectedModel = null;
+  let datasets_len = {{ datasets_len }};
+  let abnormal_disconnection = true;
+
+  let selectedDatasetId = null;
+  let selectedModelId = null;
+
+  let datasets_json = {{ datasets_json | safe }};
+
+  let models_json = {{ models_json | safe }};
+  let train_logs_json = {{ train_logs_json | safe }};
+
+  let chart;
+
+  $(document).ready(function () {
+    $(document).on('show.bs.modal', '.modal', e => {
+      const $currentModal = $(e.currentTarget);
+      var zIndex = 1040 + (10 * $('.modal:visible').length);
+      $currentModal.css('z-index', zIndex);
+      setTimeout(function () {
+        $('.modal-backdrop')
+          .not('.modal-stack')
+          .css('z-index', zIndex - 1)
+          .addClass('modal-stack');
+      }, 0);
+    });
+  });
+
+  /* onload */
+  $(window).bind('load', function () {
+    // click dataset list.
+    $('#dataset-list button').on('click', function (e) {
+      selectedDatasetId = e.target.value;
+      selectedDataset = datasets_json[selectedDatasetId];
+      e.preventDefault();
+      $(this).tab('show');
+
+      // show dataset infomation.
+      showDatasetInfo(selectedDatasetId);
+
+      //
+      $('#dataset-name').attr('href', "dataset_detail/" + project_id + "?dataset=" + selectedDatasetId)
+
+      // init tooltip
+      $('[data-toggle="tooltip"]').tooltip();
+    })
+
+    // click model list.
+    $('#model-list button').on('click', function (e) {
+      selectedModelId = e.target.value;
+      selectedModel = models_json[selectedModelId];
+      e.preventDefault();
+      $(this).tab('show');
+
+      // show model infomation.
+      showModelInfo(selectedModelId);
+
+      //
+      $('#use-dataset-name').attr('href', "dataset_detail/" + project_id + "?model=" + selectedModelId)
+
+      let models_length = Object.keys(models_json).length
+      if (models_length > 0) {
+        if (models_json[selectedModelId].train_status === 'finished' || models_json[selectedModelId].train_status === 'stopped') {
+          $('#model-download').attr('href', selectedModel['weight_pathes'][0]['path'])
+        } else {
+          $('#model-download').attr('href', '#')
+        }
+      }
+
+      // chart
+      train_log = train_logs_json[selectedModelId]
+
+      if (chart != null) chart.destroy();
+      var ctx = document.getElementById('canvas').getContext('2d');
+      chart = createChart(ctx, train_log.n_epochs, train_log.best_list);
+      setChartData(chart, train_log.data,  train_log.best_epoch['train'], train_log.best_epoch['val']);
+      chart.update();
+    })
+
+    // init dataset list
+    let n_dataset = $('#dataset-list button').length
+    if (n_dataset > 0) {
+      selectedDatasetId = $('#dataset-list button')[0].value;
+      $('#' + $('#dataset-list button')[0].id).trigger('click')
+
+      //
+    } else {
+      selectedDatasetId = null;
+    }
+
+    // init model list
+    let n_model = $('#model-list button').length
+    if (n_model > 0) {
+      selectedModelId = $('#model-list button')[0].value;
+      $('#' + $('#model-list button')[0].id).trigger('click')
+    } else {
+      selectedModelId = null;
+    }
+  });
+
+  function showDatasetInfo(id) {
+    let datasets_length = Object.keys(datasets_json).length
+    if (datasets_length > 0) {
+      $("#dataset-name").html(datasets_json[id].name);
+      $("#default_train_ratio").html(datasets_json[id].default_train_ratio + '%');
+      $("#default_train_ratio").css('width', datasets_json[id].default_train_ratio + '%');
+      $("#default_val_ratio").html(datasets_json[id].default_val_ratio + '%');
+      $("#default_val_ratio").css('width', datasets_json[id].default_val_ratio + '%');
+      $("#default_test_ratio").html(datasets_json[id].default_test_ratio + '%');
+      $("#default_test_ratio").css('width', datasets_json[id].default_test_ratio + '%');
+      $("#created-on").html(datasets_json[id].created_on);
+      $("#dataset-memo").val(datasets_json[id].memo);
+      $("#classes").html(datasets_json[id].classes);
+      $("#n_data").html(datasets_json[id].n_data);
+    }
+  }
+
+  function showModelInfo(id) {
+    let models_length = Object.keys(models_json).length
+    if (models_length > 0) {
+      $("#model-name").html(models_json[id].name);
+      $("#model-created-on").html(models_json[id].created_on);
+      $("#use-dataset-name").html(models_json[id]['dataset_name']);
+      $("#image-type").html(models_json[id]['image_type'] === "color" ? "COLOR (3ch)" : "GRAYSCALE (1ch)")
+      $("#architecture-type").html(models_json[id]['architecture_type']);
+      $("#epochs").html(models_json[id]['epochs']);
+      $("#batch-size").html(models_json[id]['batch_size']);
+      $("#learning-rate").html(models_json[id]['learning_rate']);
+      $("#optimizer").html(models_json[id]['optimizer']);
+      $("#train-status").html(gettext(models_json[id]['train_status']));
+      $("#epochs-runned").html(models_json[id]['epochs_runned']);
+      $("#train-loss").html(models_json[id]['train_loss'].toFixed(5));
+      $("#train-acc").html(models_json[id]['train_acc'].toFixed(5));
+      $("#val-loss").html(models_json[id]['val_loss'].toFixed(5));
+      $("#val-acc").html(models_json[id]['val_acc'].toFixed(5));
+      $("#model-memo").val(models_json[id]['memo']);
+    }
+  }
+
+  var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+  const socket = new WebSocket(
+    'ws://'
+    + window.location.host
+    + '/ws/classification'
+  )
+
+  // Delete dataset
+  $('#delete-dataset-button').on('click', function () {
+    if (selectedDatasetId != null) {
+      show_confirm(gettext("Notice"), gettext("delete dataset.\nIs it OK?"), function (result) {
+        if (result) {
+          document.forms['delete-dataset-form'].action = "delete_dataset/" + selectedDataset['id'];
+          document.forms['delete-dataset-form'].submit();
+        }
+      });
+    }
+  });
+
+  // Delete model
+  $('#delete-model-button').on('click', function () {
+    if (selectedModel !== null) {
+      show_confirm(gettext("Notice"), gettext("delete model.\nIs it OK?"), function (result) {
+        if (result) {
+          document.forms['delete-model-form'].action = "delete_model/" + selectedModel['id'];
+          document.forms['delete-model-form'].submit();
+        }
+      });
+    }
+  });
+
+  // Open test dialog
+  $('#test-model').on('click', function (e) {
+    let models_length = Object.keys(models_json).length
+    if (models_length > 0) {
+      if (models_json[selectedModelId].train_status === 'finished' || models_json[selectedModelId].train_status === 'stopped') {
+        $('#test-model-form').attr('action', "test_model/" + project_id + "/" + selectedModelId);
+        $('#test-model-form').submit();
+      }
+      else {
+        show_alert(gettext("Notice"), gettext("Selected model training is not completed"));
+      }
+    }
+  });
+
+  //////////////////////////////////////
+  // Websocket events (onclose & receive)
+  //////////////////////////////////////
+  socket.onopen = function (e) {
+    // get access language from URL
+    let user_lang = location.href.split('/')[3];
+    socket.send(JSON.stringify({
+      'status': 'lang-setting',
+      'user-lang': user_lang
+    }));
+  }
+
+  socket.onclose = function (e) {
+    if (abnormal_disconnection == true) {
+      alert(gettext("WebSocket disconnected!\nplease check deepeye terminal!"))
+      setTimeout("location.href='/classification'/", 3000);
+    }
+  }
+</script>
+
+{% endblock javascript %}

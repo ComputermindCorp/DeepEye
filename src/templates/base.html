@@ -1,0 +1,44 @@
+{% load static %}
+{% load i18n %}
+
+<!doctype html>
+<html lang="en" >
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=0.8, maximum-scale=3.0, minimum-scale=0.1">
+    <!-- Bootstrap CSS -->
+    
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/primary.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <title>{% block title %}{% endblock title %}</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <a class="navbar-brand" href="{% url 'home' %}">
+        DeepEye Beta
+      </a>
+      <div class="navbar-text ml-auto" id="navbar-text">
+        {% if project is not None %}
+        【{% trans 'Classification' %}】{{project.name}}
+        {% endif %}
+      </div>
+    </nav>
+    
+    <div class="container-fluid">
+      {% block content %}
+      {% endblock %}
+    </div>    
+
+    <!-- jQuery first, then Bootstrap JS -->
+    <script src="{% static 'js/jquery.slim.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}" ></script>
+    <script src="{% static 'js/utils.js' %}"></script>
+    <script src="{% static 'js/Chart.bundle.min.js' %}"></script>
+    
+  
+    {% block javascript %}
+    {% endblock javascript %}
+  </body>
+</html>

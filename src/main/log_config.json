@@ -1,0 +1,31 @@
+{
+    "version": 1,
+    "disable_existing_loggers": false,
+    "formatters": {
+        "simple": {
+            "format": "%(asctime)s %(name)s:%(lineno)s %(funcName)s [%(levelname)s]: %(message)s"
+        }
+    },
+
+    "handlers": {
+        "consoleHandler": {
+            "class": "logging.StreamHandler",
+            "level": "DEBUG",
+            "formatter": "simple",
+            "stream": "ext://sys.stdout"
+        },
+        "fileHandler": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "DEBUG",
+            "formatter": "simple",
+            "filename": "log/deepeye.log",
+            "maxBytes": 1048576,
+            "backupCount": 5
+        }
+    },
+
+    "root": {
+        "level": "DEBUG",
+        "handlers": ["consoleHandler", "fileHandler"]
+    }
+}

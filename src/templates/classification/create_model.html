@@ -1,0 +1,301 @@
+{% extends 'base.html' %}
+{% block title %}Classification | Main{% endblock title %}
+{% block content %}
+{% load widget_tweaks %}
+{% load static %}
+{% load i18n %}
+
+<!-- Alert messages -->
+{% if messages %}
+{% for message in messages %}
+<div class="alert{% if message.tags %} alert-{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+  {{ message | linebreaksbr }}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+{% endif %}
+
+<div class="mx-4">
+  <form id="train-start" method="POST">
+    {% csrf_token %}
+    <div class="row my-4">
+      <div class="col">
+        <h5>{% trans 'Model Options' %}</h5>
+      </div>
+    </div>
+    <div class="row mb-4">
+      <div class="col">
+        <label class="mr-5">{% trans "Dataset" %}</label>
+        <!-- Dataset List-->
+        <div id="dataset-list" style="height:170px; overflow-y:scroll;">
+          <div class="list-group">
+            {% for ds in datasets %}
+            <button type="button" id="dataset_{{ ds.id }}" value="{{ ds.id }}" class="list-group-item list-group-item-action py-1">{{ ds.name }}</button>
+            {% empty %}
+            <div>{% trans 'No Dataset' %}</div>
+            {% endfor %}
+          </div>
+        </div>
+        <input type="hidden" id="id_dataset" name="dataset">
+      </div>
+      <div class="col">
+        <!-- [param] Model name-->
+        <label>{% trans 'Model Name' %}</label>
+        {{ model_form.name | attr:"id:id_model_name" | add_class:"form-control" }}
+        {{ model_form.name.errors }}
+        <!-- [param] Epochs-->
+        <label>{% trans 'Epochs' %}</label>
+        {{ model_form.epochs | add_class:"form-control" }}
+        {{ model_form.epochs.errors }}
+        <!-- [param] Batch size-->
+        <label>{% trans 'Batch Size' %}</label>
+        {{ model_form.batch_size | add_class:"form-control" }}
+        {{ model_form.batch_size.errors }}
+        <!-- [param] validation data ratio -->
+        <label>Val [%]</label>
+        {{ model_form.val_ratio | add_class:"form-control" }}
+        {{ model_form.val_ratio.errors }}
+      </div>
+      <div class="col">
+        <!-- [param] Architecture -->
+        <label>{% trans 'Architecture' %}</label>
+        {{ model_form.architecture_type|add_class:"form-control" }}
+        {{ model_form.architecture_type.errors }}
+        <!-- [param] Learning Rate -->
+        <label>{% trans 'Learning Rate' %}</label>
+        {{ model_form.learning_rate | add_class:"form-control" }}
+        {{ model_form.learning_rate.errors }}
+        <!-- [param] Optimizer -->
+        <label>{% trans 'Optimizer' %}</label>
+        {{ model_form.optimizer|add_class:"form-control" }}
+        {{ model_form.optimizer.errors }}
+        <!-- [param] Test data ratio -->
+        <label>Test [%]</label>
+        {{ model_form.test_ratio|add_class:"form-control" }}
+        {{ model_form.test_ratio.errors }}
+      </div>
+      <div class="col">
+        <!-- [param] memo -->
+        <label>{% trans 'Memo' %}</label>
+        {{ model_form.memo|add_class:"form-control" }}
+        {{ model_form.memo.errors }}
+        <!-- Color-Mode-->
+        <label>{% trans 'Image Type' %}</label>
+        {{ model_form.image_type|add_class:"form-control" }}
+        {{ model_form.image_type.errors }}
+      </div>
+    </div>
+    <div class="row mb-4">
+      <!--Fine Turning-->
+      <div class="col">
+        {{ model_form.fine_tuning}}
+        <label class="form-check-label" for="{{ model_form.fine_tuning.id_for_label }}">{% trans 'Fine Tuning' %}</label>
+        <!-- Model List-->
+        <div id="model-list" class="d-none" style="height:170px; overflow-y:scroll;">
+          <div class="list-group">
+            {% for model in models %}
+            <button type="button" id="model_{{ model.id }}" value="{{ model.id }}" class="list-group-item list-group-item-action py-1">{{ model.name }}</button>
+            {% empty %}
+            <div>{% trans 'No Model' %}</div>
+            {% endfor %}
+          </div>
+        </div>
+        <input type="hidden" id="id_model" name="model">
+      </div>
+      <div class="col"></div>
+      <div class="col"></div>
+    </div>
+
+    <!-- Data Augumentation Header -->
+    <div class="row mb-4">
+      <div class="col">
+        <div class="form-check from-check-inline">
+          <input type="checkbox" class="form-check-input" id="da_enable">
+          <label class="form-check-label" for="da_enable">{% trans 'Augmentation (Optional)' %}</label>
+        </div>
+      </div>
+      <div class="col">
+        <div class="text-right">
+          <button type="button" id="view_sample" class="btn btn-primary btn-sm">{% trans 'View Augmentation Sample' %}</button>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-4" id="da-setting">
+      <div class="col">
+      </div>
+      <div class="col">
+        <!-- DA: horizontal flip -->
+        <div class="form-check">
+          {{ model_form.horizontal_flip | add_class:"form-check-input" }}
+          <label class="form-check-label" for="{{ model_form.horizontal_flip.id_for_label }}">{% trans 'horizontal flip' %}</label>
+        </div>
+        <!-- DA: vertical flip -->
+        <div class="form-check">
+          {{ model_form.vertical_flip | add_class:"form-check-input" }}
+          <label class="form-check-label" for="{{ model_form.vertical_flip.id_for_label }}">{% trans 'vertical flip' %}</label>
+        </div>
+      </div>
+      <div class="col">
+        <!-- DA: rotate 30°step -->
+        <div class="form-check">
+          {{ model_form.rotate_30 | add_class:"form-check-input" }}
+          <label class="form-check-label" for="{{ model_form.rotate_30.id_for_label }}">{% trans 'rotate 30°step' %}</label>
+        </div>
+        <!-- DA: rotate 45°step -->
+        <div class="form-check">
+          {{ model_form.rotate_45 | add_class:"form-check-input" }}
+          <label class="form-check-label" for="{{ model_form.rotate_45.id_for_label }}">{% trans 'rotate 45°step' %}</label>
+        </div>
+        <!-- DA: rotate 90°step -->
+        <div class="form-check">
+          {{ model_form.rotate_90 | add_class:"form-check-input" }}
+          <label class="form-check-label" for="{{ model_form.rotate_90.id_for_label }}">{% trans 'rotate 90°step' %}</label>
+        </div>
+      </div>
+      <div class="col">
+        <!-- DA: constract -->
+        <div class="form-check">
+          {{ model_form.contrast | add_class:"form-check-input" }}
+          <label class="form-check-label" for="{{ model_form.contrast.id_for_label }}">{% trans 'contrast(Hi&Low)' %}</label>
+        </div>
+        <!-- DA: gaussian noise -->
+        <div class="form-check">
+          {{ model_form.gaussian_noise | add_class:"form-check-input" }}
+          <label class="form-check-label" for="{{ model_form.gaussian_noise.id_for_label }}">{% trans 'gaussian noise' %}</label>
+        </div>
+        <!-- DA: blur -->
+        <div class="form-check">
+          {{ model_form.blur | add_class:"form-check-input" }}
+          <label class="form-check-label" for="{{ model_form.blur.id_for_label }}">{% trans 'blur' %}</label>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-4">
+      <div class="col sm-3">
+      </div>
+    </div>
+    <div class="row mb-4">
+      <div class="col">
+        <button type="button" id="train" class="btn btn-primary">{% trans 'Train Start' %}</button>
+        <a type="button" href="/classification/{{project.id}}" class="btn btn-secondary">{% trans 'Back' %}</a>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- DataAugmentation Sample Dialog-->
+{% include 'classification/data_augumentation_sample.html' %}
+
+<!-- Alert Dialog -->
+{% include 'alert.html' %}
+
+{% endblock %}
+
+<!--==================== javascript ====================-->
+{% block javascript %}
+
+<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+<script type="text/javascript">
+  let selectedDatasetId = null;
+  let datasets_json = {{ datasets_json | safe }};
+  let models_json = {{ models_json | safe }};
+
+  function set_da_view() {
+    let da_enable = $('#da_enable').prop('checked');
+
+    let cls = da_enable ? "row mb-4" : "row mb-4 d-none";
+    $('#da-setting').attr("class", cls);
+    $('#view_sample').prop("disabled", !da_enable);
+  }
+
+  function set_fine_tuning_view(){
+    let enable = $('#id_fine_tuning').prop('checked');
+
+      if (enable) {
+        $('#model-list').attr('class', '')
+      } else {
+        $('#model-list').attr('class', 'd-none')
+      }
+  }
+
+  $(window).bind('load', function () {
+    $('#dataset-list button').on('click', function (e) {
+      selectedDatasetId = e.target.value;
+      e.preventDefault();
+      $(this).tab('show');
+
+      showDataRatio(selectedDatasetId);
+      $('#id_dataset').val(selectedDatasetId);
+    });
+
+    $('#model-list button').on('click', function (e) {
+      selectedModelId = e.target.value;
+      e.preventDefault();
+      $(this).tab('show');
+
+      $('#id_model').val(selectedModelId);
+    });
+
+    $("#id_fine_tuning").on('change', function (e) {
+      e.preventDefault();
+
+      set_fine_tuning_view()
+    });
+
+    $('#da_enable').on('change', function (e) {
+      e.preventDefault();
+
+      set_da_view();
+    });
+
+    //
+    let n = $('#dataset-list button').length
+    if (n > 0) {
+      selectedDatasetId = $('#dataset-list button')[0].value;
+      $('#' + $('#dataset-list button')[0].id).trigger('click')
+    } else {
+      selectedDatasetId = null;
+    }
+
+    //
+    n = $('#model-list button').length
+    if (n > 0) {
+      selectedModelId = $('#model-list button')[0].value;
+      $('#' + $('#model-list button')[0].id).trigger('click')
+    } else {
+      selectedModelId = null;
+    }
+
+    //
+    set_da_view();
+    set_fine_tuning_view();
+  });
+
+  function showDataRatio(id) {
+    let datasets_length = Object.keys(datasets_json).length
+    if (datasets_length > 0) {
+      $('#id_val_ratio').val(datasets_json[id]['default_val_ratio']);
+      $('#id_test_ratio').val(datasets_json[id]['default_test_ratio']);
+    }
+  }
+
+  // train
+  $('#train').click(function (e) {
+    show_confirm(gettext("Notice"), gettext("Start training model?"), function (result) {
+      if (result) {
+        $("#train-start").submit();
+      } else {
+        return false;
+      }
+    });
+  });
+
+  // view Data Augmentation sample
+  $('#view_sample').on('click', function () {
+    $('#DA-sample-modal').modal({ backdrop: 'static' });
+  });
+</script>
+
+{% endblock javascript %}

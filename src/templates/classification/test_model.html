@@ -1,0 +1,356 @@
+{% extends 'base.html' %}
+{% block title %}Classification | Main{% endblock title %}
+{% block content %}
+{% load widget_tweaks %}
+{% load static %}
+{% load i18n %}
+
+<div class="mx-4">
+  <div class="row my-4">
+    <div class="col">
+      <h5>{% trans 'Test Model' %}</h5>
+      <div>{% trans 'Model Name' %}: {{model.name }}</div>
+    </div>
+  </div>
+  <hr>
+  <!-- Area 1  Header -->
+  <div class="row mb-4">
+    <div class="col">
+      <h5 class="text-center">{% trans 'Use Self Dataset' %}</h5>
+    </div>
+  </div>
+  <div class="row mb-4">
+    <!-- Area 1  Left -->
+    <div class="col">
+      <table class="table-borderless">
+        <tbody>
+          <tr class="mb-2">
+            <td>{% trans 'Use Dataset' %}:</td>
+            <td>
+              <a href="" id="dataset-name1" class="ml-2"></a>
+            </td>
+          </tr>
+          <tr class="mb-2">
+            <td>
+              <div class="form-check from-check-inline">
+                <input type="checkbox" class="form-check-input" id="self-train-checkbox" name="self-train-checkbox">
+                <label class="form-check-label" for="self-train-checkbox">Train</label>
+              </div>
+            </td>
+            <td>
+              <div class="progress">
+                <div id="test_train_info1" class="progress-bar" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100">0%</div>
+              </div>
+            </td>
+          </tr>
+          <tr class="mb-2">
+            <td>
+              <div class="form-check from-check-inline">
+                <input type="checkbox" class="form-check-input" id="self-val-checkbox" name="self-val-checkbox">
+                <label class="form-check-label" for="self-val-checkbox">Validation</label>
+              </div>
+            </td>
+            <td>
+              <div class="progress">
+                <div id="test_val_info1" class="progress-bar" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100">0%</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="form-check from-check-inline">
+                <input type="checkbox" class="form-check-input" id="self-test-checkbox" name="self-test-checkbox" checked>
+                <label class="form-check-label" for="self-test-checkbox">Test</label>
+              </div>
+            </td>
+            <td>
+              <div class="progress">
+                <div id="test_test_info1" class="progress-bar" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100">0%</div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Area 1  Right -->
+    <div class="col">
+      <div class="text-right">
+        <button type="submit" id="start-self-dataset" class="btn btn-primary">
+          <span id="spinner-start-self-dataset" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
+          {% trans 'Test Start' %}
+        </button>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <!-- Area 2  Header -->
+  <div class="row mb-4">
+    <div class="col">
+      <h5 class="text-center">{% trans 'Use Saved Dataset' %}</h5>
+    </div>
+  </div>
+  <div class="row mb-4">
+    <!-- Area 2  Left -->
+    <div class="col">
+      <div id="dataset-list" class="list-box-s scroll-y">
+        <div class="list-group">
+          {% for ds in datasets %}
+          <button type="button" id="test_{{ ds.id }}" value="{{ ds.id }}" class="list-group-item list-group-item-action py-1">{{ ds.name }}</button>
+          {% empty %}
+          <div>{% trans 'No Dataset' %}</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-4">
+    <!-- Area 3  Left -->
+    <div class="col">
+      <table class="table-borderless">
+        <tbody>
+          <tr class="mb-2">
+            <td>{% trans 'Use Dataset' %}:</td>
+            <td>
+              <a href="" id="dataset-name2" class="ml-2"></a>
+            </td>
+          </tr>
+          <tr class="mb-2">
+            <td>データ数:</td>
+            <td>
+              <div id="n_dataset2"></div>
+            </td>
+          </tr>
+          <tr class="mb-2">
+            <td>
+              <div class="form-check from-check-inline">
+                <input type="checkbox" class="form-check-input" id="dataset-train-checkbox" name="dataset-train-checkbox">
+                <label class="form-check-label" for="dataset-train-checkbox">Train</label>
+              </div>
+            </td>
+            <td>
+              <div class="progress">
+                <div id="test_train_info2" class="progress-bar" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100">0%</div>
+              </div>
+            </td>
+          </tr>
+          <tr class="mb-2">
+            <td>
+              <div class="form-check from-check-inline">
+                <input type="checkbox" class="form-check-input" id="dataset-val-checkbox" name="dataset-val-checkbox">
+                <label class="form-check-label" for="dataset-val-checkbox">Validation</label>
+              </div>
+            </td>
+            <td>
+              <div class="progress">
+                <div id="test_val_info2" class="progress-bar" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100">0%</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="form-check from-check-inline">
+                <input type="checkbox" class="form-check-input" id="dataset-test-checkbox" name="dataset-test-checkbox" checked>
+                <label class="form-check-label" for="dataset-test-checkbox">Test</label>
+              </div>
+            </td>
+            <td>
+              <div class="progress">
+                <div id="test_test_info2" class="progress-bar" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100">0%</div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Area 3  Right -->
+    <div class="col">
+      <div class="text-right">
+        <button type="submit" id="start-save-dataset" class="btn btn-primary">
+          <span id="spinner-start-save-dataset" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
+          {% trans 'Test Start' %}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+<div>
+  <div class="collapse" id="test-wait">
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  <form action="/classification/{{project.id}}" method="GET">
+    <button type="submit" id="button-back" class="btn btn-secondary">{% trans 'Back' %}</button>
+  </form>
+</div>
+
+<!-- Alert Dialog -->
+{% include 'alert.html' %}
+
+{% endblock %}
+
+<!--==================== javascript ====================-->
+{% block javascript %}
+
+<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+<script type="text/javascript">
+
+  let datasets_json = {{ datasets_json | safe }};
+  let datasets_len = {{ datasets_len }};
+  let model_json = {{ model_json | safe }};
+  let model_id = {{ model_id }};
+  let model_dataset_id = {{ model_dataset_id }};
+  const project_id = {{ project_id }};
+  const project_name = "{{ project_name }}";
+  let abnormal_disconnection = true;
+
+  const socket = new WebSocket(
+    'ws://'
+    + window.location.host
+    + '/ws/classification'
+  )
+
+  socket.onopen = function (e) {
+    // get access language from URL
+    let user_lang = location.href.split('/')[3];
+    socket.send(JSON.stringify({
+      'status': 'lang-setting',
+      'user-lang': user_lang
+    }));
+  }
+
+  socket.onclose = function (e) {
+    if (abnormal_disconnection == true) {
+      alert(gettext("WebSocket disconnected!\nplease check deepeye terminal!"))
+      setTimeout("location.href='/classification'/" + project_id, 3000);
+    }
+  }
+
+
+  $(window).bind('load', function () {
+    $('#dataset-list button').on('click', function (e) {
+      selectedDatasetId = e.target.value;
+      e.preventDefault();
+      $(this).tab('show');
+
+      let dataset = datasets_json[selectedDatasetId];
+      $('#dataset-name2').html(dataset['name']);
+      $('#n_dataset2').html(dataset['n_data']);
+      $("#test_train_info2").html(dataset['default_train_ratio'] + '%');
+      $("#test_train_info2").css('width', dataset['default_train_ratio'] + '%');
+      $("#test_val_info2").html(dataset['default_val_ratio'] + '%');
+      $("#test_val_info2").css('width', dataset['default_val_ratio'] + '%');
+      $("#test_test_info2").html(dataset['default_test_ratio'] + '%');
+      $("#test_test_info2").css('width', dataset['default_test_ratio'] + '%');
+
+      $('#dataset-name2').attr('href', "/classification/dataset_detail/" + project_id + "?dataset=" + selectedDatasetId)
+    });
+
+    $("#dataset-name1").html(model_json.dataset_name);
+    var train_ratio = 100 - (parseInt(model_json.val_ratio) + parseInt(model_json.test_ratio))
+    $("#test_train_info1").html(train_ratio + '%');
+    $("#test_train_info1").css('width', train_ratio + '%');
+    $("#test_val_info1").html(model_json.val_ratio + '%');
+    $("#test_val_info1").css('width', model_json.val_ratio + '%');
+    $("#test_test_info1").html(model_json.test_ratio + '%');
+    $("#test_test_info1").css('width', model_json.test_ratio + '%');
+
+    let n_dataset = $('#dataset-list button').length
+    if (n_dataset > 0) {
+      selectedDatasetId = $('#dataset-list button')[0].value;
+      $('#' + $('#dataset-list button')[0].id).trigger('click')
+    } else {
+      selectedDatasetId = null;
+    }
+
+    $('#dataset-name1').attr('href', "/classification/dataset_detail/" + project_id + "?dataset=" + model_dataset_id)
+  });
+
+
+  // custom test
+  // upload files decode
+  var test_dir_list = new Array();
+  $("#test_form #file_list").change(function (event) {
+    // clear array
+    test_dir_list = new Array();
+    var temp = event.target.files;
+    for (let i = 0; i < temp.length; i++) {
+      test_dir_list[i] = temp[i].webkitRelativePath;
+    };
+  });
+
+  // start test(self)
+  $("#start-self-dataset").on('click', function () {
+    var self_train_flag = $("#self-train-checkbox").prop('checked');
+    var self_val_flag = $("#self-val-checkbox").prop('checked');
+    var self_test_flag = $("#self-test-checkbox").prop('checked');
+
+    if (self_train_flag === false && self_val_flag === false && self_test_flag === false) {
+      show_alert(gettext('Notice'), gettext("Must check at least one"), function () { });
+    } else {
+      $('#spinner-start-self-dataset').show();
+      button_enable(false);
+
+      socket.send(JSON.stringify({
+        'status': 'test',
+        'project_id': project_id,
+        'predict_type': 'self_dataset',
+        'model_id': model_id,
+        'train_flag': self_train_flag,
+        'val_flag': self_val_flag,
+        'test_flag': self_test_flag
+      }))
+    }
+  });
+
+  // start test(dataset)
+  $("#start-save-dataset").on('click', function () {
+    var dataset_train_flag = $("#dataset-train-checkbox").prop('checked');
+    var dataset_val_flag = $("#dataset-val-checkbox").prop('checked');
+    var dataset_test_flag = $("#dataset-test-checkbox").prop('checked');
+
+    if (dataset_train_flag === false && dataset_val_flag === false && dataset_test_flag === false) {
+      show_alert(gettext('Notice'), gettext("Must check at least one"));
+    } else {
+      $('#spinner-start-save-dataset').show();
+      button_enable(false);
+
+      socket.send(JSON.stringify({
+        'status': 'test',
+        'project_id': project_id,
+        'predict_type': 'save_dataset',
+        'model_id': model_id,
+        'database_id': selectedDatasetId,
+        'train_flag': dataset_train_flag,
+        'val_flag': dataset_val_flag,
+        'test_flag': dataset_test_flag
+      }))
+    }
+  });
+
+  function button_enable(enable) {
+    $("#start-self-dataset").prop("disabled", !enable)
+    $("#start-save-dataset").prop("disabled", !enable)
+    $("#button-back").prop("disabled", !enable)
+  }
+
+  socket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+
+    if (data.status === "error") {
+      alert(data.text);
+      // reload
+      location.replace('/classification')
+    }
+
+    else if (data.status === "test-complete") {
+      location.replace('/classification/test_model_result/' + project_id + '/' + data['dataset_id'] + '/' + data['test_result_id']);
+      abnormal_disconnection = false;
+      setTimeout("location.href='/classification'", 3000);
+    }
+  }
+
+</script>
+
+{% endblock javascript %}
