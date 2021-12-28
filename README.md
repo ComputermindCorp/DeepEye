@@ -60,5 +60,3 @@ $ python manage.py runserver 0.0.0.0:8000
 # License
 This Application is under Apache License 2.0. 
 See LICENSE for details
-
-Copyright (c) 2021-  Computermind Corp.
